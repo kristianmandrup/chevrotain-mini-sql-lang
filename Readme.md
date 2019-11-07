@@ -1,6 +1,6 @@
 # Chevrotain SQL parser in TypeScript
 
-The [Chevrotatain SQL parser tutorial](https://sap.github.io/chevrotain/docs/tutorial) converted to TypeScript and Jest
+The [Chevrotatain SQL parser tutorial](https://sap.github.io/chevrotain/docs/tutorial) converted to [TypeScript](https://www.typescriptlang.org/) and [Jest](jestjs.io)
 
 - [Original Chevrotain example code](https://github.com/SAP/chevrotain/tree/master/examples/tutorial)
 
@@ -10,9 +10,16 @@ The [Chevrotatain SQL parser tutorial](https://sap.github.io/chevrotain/docs/tut
 
 ## Run tests
 
+This project uses [Jest](jestjs.io) with [jest-extended](https://github.com/jest-community/jest-extended) for additional convenience expectations
+
 `$ npx jest`
 
 ## Design
+
+- lexer
+- parser
+- actions and AST
+- error handling and recovery
 
 ### Lexer
 
