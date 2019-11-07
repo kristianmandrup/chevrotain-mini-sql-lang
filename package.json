@@ -17,8 +17,10 @@
     "@types/jest": "^24.0.22",
     "@types/lodash": "^4.14.145",
     "assert": "^2.0.0",
+    "jest": "^24.9.0",
     "jest-extended": "^0.11.2",
     "lodash": "^4.17.15",
+    "ts-jest": "^24.1.0",
     "ts-node": "^8.4.1",
     "typescript": "^3.7.2"
   }

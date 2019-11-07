@@ -5,19 +5,20 @@
 // Therefore using the CST Visitor is the recommended approach:
 // https://github.com/SAP/chevrotain/blob/master/docs/tutorial/src/step3a_actions_visitor.js
 
-import { selectLexer } from "../lexer";
+import { lex, tokenVocabulary } from "../lexer";
 import { EmbeddedActionsParser } from "chevrotain";
-const { tokenVocabulary } = selectLexer;
 
 // individual imports, prefer ES6 imports if supported in your runtime/transpiler...
-const Select = tokenVocabulary.Select;
-const From = tokenVocabulary.From;
-const Where = tokenVocabulary.Where;
-const Identifier = tokenVocabulary.Identifier;
-const Integer = tokenVocabulary.Integer;
-const GreaterThan = tokenVocabulary.GreaterThan;
-const LessThan = tokenVocabulary.LessThan;
-const Comma = tokenVocabulary.Comma;
+const {
+  Select,
+  From,
+  Where,
+  Identifier,
+  Integer,
+  GreaterThan,
+  LessThan,
+  Comma
+} = tokenVocabulary;
 
 const MyEmbeddedActionsParser: any = EmbeddedActionsParser;
 
@@ -134,7 +135,7 @@ class SelectParserEmbedded extends MyEmbeddedActionsParser {
 const parserInstance = new SelectParserEmbedded();
 
 export const toAst = (inputText: string) => {
-  const lexResult = selectLexer.lex(inputText);
+  const lexResult = lex(inputText);
 
   // ".input" is a setter which will reset the parser's internal's state.
   parserInstance.input = lexResult.tokens;

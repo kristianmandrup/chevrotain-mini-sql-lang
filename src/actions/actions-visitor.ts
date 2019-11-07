@@ -2,7 +2,7 @@
 
 // Adding Actions(semantics) to our grammar using a CST Visitor.
 
-import { selectLexer } from "../lexer";
+import { lex } from "../lexer";
 // re-using the parser implemented in step two.
 import * as parser from "../parser";
 
@@ -104,7 +104,7 @@ export class SQLToAstVisitor extends BaseSQLVisitor {
 const toAstVisitorInstance: any = new SQLToAstVisitor();
 
 export const toAst = (inputText: string) => {
-  const lexResult = selectLexer.lex(inputText);
+  const lexResult = lex(inputText);
 
   // ".input" is a setter which will reset the parser's internal's state.
   parserInstance.input = lexResult.tokens;

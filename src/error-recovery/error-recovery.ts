@@ -1,9 +1,6 @@
-import chevrotain from "chevrotain";
+import { createToken, CstParser, Lexer } from "chevrotain";
 
 // ----------------- lexer -----------------
-const createToken = chevrotain.createToken;
-const Lexer = chevrotain.Lexer;
-const CstParser = chevrotain.CstParser;
 
 export const tokenMap = {
   True: createToken({ name: "True", pattern: /true/ }),
