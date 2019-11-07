@@ -1,0 +1,26 @@
+{
+  "name": "sql-lang",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chevrotain": "^6.5.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.4",
+    "@types/jest": "^24.0.22",
+    "@types/lodash": "^4.14.145",
+    "chai": "^4.2.0",
+    "jest": "^24.9.0",
+    "lodash": "^4.17.15",
+    "ts-jest": "^24.1.0",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.7.2"
+  }
+}
