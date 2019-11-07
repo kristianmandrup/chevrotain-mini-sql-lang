@@ -52,7 +52,7 @@ const allTokens = [
   LessThan
 ];
 
-export const SelectLexer = new Lexer(allTokens);
+export const selectLexer: any = new Lexer(allTokens);
 
 allTokens.forEach(tokenType => {
   tokenVocabulary[tokenType.name] = tokenType;

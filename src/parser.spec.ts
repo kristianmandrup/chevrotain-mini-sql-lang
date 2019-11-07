@@ -1,14 +1,15 @@
 import * as _ from "lodash";
 import { parse } from "./parser";
+const context = describe;
 
 describe("Chevrotain Tutorial", () => {
-  describe("Step 2 - Parsing", () => {
+  context("Step 2 - Parsing", () => {
     it("Can Parse a simple input", () => {
       let inputText = "SELECT column1 FROM table2";
       expect(() => parse(inputText)).not.toThrow();
     });
 
-    describe("invalid input", () => {
+    context("invalid input", () => {
       let inputText = "SELECT FROM table2";
 
       it("Will throw an error for an invalid input", () => {

@@ -2,8 +2,10 @@ import * as _ from "lodash";
 import { tokenMatcher } from "chevrotain";
 import { lex, tokenVocabulary } from "./lexer";
 
+const context = describe;
+
 describe("Chevrotain Tutorial", () => {
-  describe("Step 1 - Lexing", () => {
+  context("Step 1 - Lexing", () => {
     it("Can Lex a simple input", () => {
       let inputText = "SELECT column1 FROM table2";
       let lexingResult = lex(inputText);
