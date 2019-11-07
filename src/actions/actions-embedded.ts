@@ -142,6 +142,7 @@ export const toAst = (inputText: string) => {
 
   // No semantic actions so this won't return anything yet.
   const ast = parserInstance.selectStatement();
+  // console.log("AST - embedded", ast);
 
   if (parserInstance.errors.length > 0) {
     throw Error(

@@ -120,6 +120,6 @@ export const toAst = (inputText: string) => {
   }
 
   const ast = toAstVisitorInstance.visit(cst);
-
+  // console.log("AST - visitor", ast);
   return ast;
 };

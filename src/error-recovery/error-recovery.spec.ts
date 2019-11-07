@@ -25,11 +25,11 @@ describe("Chevrotain Tutorial", () => {
     }
 
     it("Can perform single token insertion recovery", () => {
-      let invalidInput = '{ "key"   666}';
+      let invalidInput = '{ "key"   696}';
       let parsingResult = parseJsonToCst(invalidInput);
       expect(parsingResult.parseErrors).toHaveLength(1);
       expect(parsingResult.parseErrors[0].message).toInclude(
-        "Expecting token of type --> Colon <-- but found --> '666' <--"
+        "Expecting token of type --> Colon <-- but found --> '696' <--"
       );
       let minimizedCst = minimizeCst(parsingResult.cst);
 
@@ -81,7 +81,7 @@ describe("Chevrotain Tutorial", () => {
                           children: {
                             NumberLiteral: [
                               {
-                                image: "666",
+                                image: "696",
                                 startOffset: 10,
                                 tokenType: NumberLiteral
                               }
@@ -107,7 +107,7 @@ describe("Chevrotain Tutorial", () => {
     });
 
     it("Can perform single token deletion recovery", () => {
-      let invalidInput = '{ "key" }: 666}';
+      let invalidInput = '{ "key" }: 696}';
       let parsingResult = parseJsonToCst(invalidInput);
       expect(parsingResult.parseErrors).toHaveLength(1);
       expect(parsingResult.parseErrors[0].message).toInclude(
@@ -157,7 +157,7 @@ describe("Chevrotain Tutorial", () => {
                           children: {
                             NumberLiteral: [
                               {
-                                image: "666",
+                                image: "696",
                                 startOffset: 11,
                                 tokenType: NumberLiteral
                               }
@@ -183,13 +183,13 @@ describe("Chevrotain Tutorial", () => {
     });
 
     it("Can perform in repetition re-sync recovery", () => {
-      // the '666' number literal should not appear after the "2"
+      // the '696' number literal should not appear after the "2"
       let invalidInput =
-        '{\n"key1" : 1, \n"key2" : 2 666 \n"key3"  : 3, \n"key4"  : 4 }';
+        '{\n"key1" : 1, \n"key2" : 2 696 \n"key3"  : 3, \n"key4"  : 4 }';
       let parsingResult = parseJsonToCst(invalidInput);
       expect(parsingResult.parseErrors).toHaveLength(1);
       expect(parsingResult.parseErrors[0].message).toInclude(
-        "Expecting token of type --> RCurly <-- but found --> '666'"
+        "Expecting token of type --> RCurly <-- but found --> '696'"
       );
       let minimizedCst = minimizeCst(parsingResult.cst);
 
