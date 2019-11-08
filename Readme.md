@@ -166,7 +166,7 @@ This is a rather contrived example however where we don't have enough informatio
 
 See the `error-recovery.spec.ts` tests.
 
-Invalid extra token `}` before colon `:` 
+Invalid extra token `}` before colon `:`
 
 ```ts
 let invalidInput = '{ "key" }: 696}';
@@ -524,7 +524,9 @@ The comment grammar definition simple says that either of the patterns `comment-
 
 ## Language Server Protocol (LSP)
 
-See [LSP example](https://github.com/kristianmandrup/app-ml-proj/tree/master/packages/lsp)
+- [Chevrotain Language Server guide issue](https://github.com/SAP/chevrotain/issues/921#)
+- [LSP code example](https://github.com/kristianmandrup/app-ml-proj/tree/master/packages/lsp)
+- [VSC Language Server extension guide](https://code.visualstudio.com/api/language-extensions/language-server-extension-guide)
 
 To create an LSP project from scratch, use the yo `code` generator
 
@@ -542,7 +544,18 @@ Make sure you have a file structure as follows
 └── server // Language Server
     └── src
         └── server.ts // Language Server entry point
-```        
+```
+
+Resources:
+
+- [VS code extension sample repo](https://github.com/Microsoft/vscode-extension-samples/tree/master/lsp-sample)
+- [A Language Server For DOT With Visual Studio Code](https://tomassetti.me/language-server-dot-visual-studio/)
+- [dot repo](https://github.com/unosviluppatore/language-server-dot)
+
+Stardog LSP example (based on Chevrotain parsers)
+
+- [stardog-language-utils](https://github.com/stardog-union/stardog-language-servers/tree/master/packages/stardog-language-utils)
+- [millan - Stardog Parsers](https://github.com/stardog-union/millan#readme)
 
 ## Debugging Extension development
 
@@ -565,7 +578,6 @@ Clone [this repo](https://github.com/gctse/syntax-highlighting-VS-Code-example) 
   ]
 }
 ```
-
 
 ### Conclusion
 
