@@ -4,6 +4,13 @@ The [Chevrotatain SQL parser tutorial](https://sap.github.io/chevrotain/docs/tut
 
 - [Original Chevrotain example code](https://github.com/SAP/chevrotain/tree/master/examples/tutorial)
 
+The following `packages` ae included:
+
+- `utils` utility functions etc for writing lexer/parser infrastructure
+- `lsp-util` utility functions etc for LSP and related infra
+- `base-language-server` class `BaseLanguageServer` for chevrotain based LSP
+- `turtle` sample Turtle parser example using namespaces (scopes)
+
 ## Install
 
 `$ npm install`
@@ -196,15 +203,7 @@ let invalidInput =
 
 ## VS Code Language extension
 
-Note: Still a WIP - needs more docs, cleanup and refactoring...
-
 See [VSC Language extension](./VSC-lang-extension.md)
-
-- `packages/standard` helpers to write lexer/parser
-- `packages/sparql` common language
-- `packages/turtle` language
-- `packages/lsp-util` utils for creating an LSP
-- `packages/turtle-language-server` LSP
 
 ### LSP Documentation
 
