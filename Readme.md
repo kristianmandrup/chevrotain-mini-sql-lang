@@ -186,10 +186,21 @@ let invalidInput =
 
 ## VS Code Language extension
 
+Note: Still a WIP - needs more docs, cleanup and refactoring...
+
 See [VSC Language extension](./VSC-lang-extension.md)
 
-- `src/standard` helpers to write lexer/parser
-- `src/sparql` common language
-- `src/turtle` language
-- `src/lsp-util` utils for creating an LSP
-- `src/turtle-language-server` LSP
+- `packages/standard` helpers to write lexer/parser
+- `packages/sparql` common language
+- `packages/turtle` language
+- `packages/lsp-util` utils for creating an LSP
+- `packages/turtle-language-server` LSP
+
+### LSP Documentation
+
+[LSP utils](./packages/lsp-utils/LSP-utils.md)
+
+### Standard helpers
+
+[Standard utils](./packages/standard/Standard.md)
+

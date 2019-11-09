@@ -1,4 +1,4 @@
-# LSP utils
+# Abstract Language Server
 
 ```ts
 class AbstractLanguageServer <
@@ -73,7 +73,7 @@ private handleContentChange(params: lsp.TextDocumentChangeEvent) {
   }
 ```
 
-Sample `onContentChange` from `TurtleLanguageServer`:
+Sample `onContentChange` from `BaseLanguageServer`:
 
 We first get the `content` using `document.getText();`.
 
@@ -90,7 +90,7 @@ Then send the diagnostics as `diagnostics: [...lexDiagnostics, ...parseDiagnosti
   onContentChange(
     { document }: lsp.TextDocumentChangeEvent,
     parseResults: ReturnType<
-      AbstractLanguageServer<TurtleParser>["parseDocument"]
+      AbstractLanguageServer<LanguageServerParser>["parseDocument"]
     >
   ) {
     const { uri } = document;

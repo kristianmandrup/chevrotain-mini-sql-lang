@@ -1,10 +1,17 @@
 import * as lsp from "vscode-languageserver";
-import { AbstractLanguageServer, errorMessageProvider } from "../../lsp-utils";
-import { TurtleParser } from "../../turtle/parser";
+import {
+  errorMessageProvider,
+  AbstractLanguageServer,
+  LanguageServerParser
+} from "../../lsp-utils";
+import { TurtleParser } from "../../turtle";
+import { IStardogParser } from "../../standard/helpers/types";
 
-export class TurtleLanguageServer extends AbstractLanguageServer<TurtleParser> {
-  constructor(connection: lsp.IConnection) {
-    super(connection, new TurtleParser({ errorMessageProvider }));
+export class BaseLanguageServer extends AbstractLanguageServer<
+  LanguageServerParser
+> {
+  constructor(connection: lsp.IConnection, parser: LanguageServerParser) {
+    super(connection, parser);
   }
 
   onInitialization(_params: lsp.InitializeParams): lsp.InitializeResult {

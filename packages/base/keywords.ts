@@ -1,6 +1,12 @@
 // @ts-ignore: import types for declarations
 import { createToken } from "chevrotain";
 
+// TODO: create keywords generator using list of keywords
+export const createKeywords = (keywords: string[]): any => {
+  // TODO: reduce keywords
+  return {};
+};
+
 export const keywords = {
   SELECT: createToken({
     name: "SELECT",

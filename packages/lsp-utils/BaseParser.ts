@@ -1,4 +1,4 @@
-import { turtleTokenTypes } from "./tokens";
+import { tokenTypes } from "../base";
 import {
   Parser,
   IParserConfig,
@@ -8,9 +8,9 @@ import {
   IMultiModeLexerDefinition,
   TokenType
 } from "chevrotain";
-import { IStardogParser } from "../standard/helpers/types";
+import { IStardogParser } from "../standard";
 
-export class TurtleParser extends Parser implements IStardogParser {
+export class BaseParser extends Parser implements IStardogParser {
   protected lexer: Lexer;
 
   // Parsing Turtle requires that the parser keep a map of namespaces in state.
@@ -40,7 +40,7 @@ export class TurtleParser extends Parser implements IStardogParser {
     cst: any;
   } => {
     this.input = this.lexer.tokenize(document).tokens;
-    const cst = this.turtleDoc();
+    const cst = this.rootRule();
     // Next two items are copied so that they can be returned/held after parse
     // state is cleared.
     const errors: IRecognitionException[] = [...this.errors];
@@ -56,7 +56,7 @@ export class TurtleParser extends Parser implements IStardogParser {
 
   constructor(
     config?: Partial<IParserConfig>,
-    tokens = turtleTokenTypes,
+    tokens = tokenTypes,
     lexerDefinition: TokenType[] | IMultiModeLexerDefinition = tokens,
     performSelfAnalysis = true
   ) {
@@ -72,9 +72,7 @@ export class TurtleParser extends Parser implements IStardogParser {
     }
   }
 
-  turtleDoc = this.RULE("turtleDoc", () => {
-    this.MANY(() => this.SUBRULE(this.statement));
-  });
-
-  statement = this.RULE("statement", () => {});
+  rootRule = (): any => {
+    throw new Error("No root rule defined");
+  };
 }

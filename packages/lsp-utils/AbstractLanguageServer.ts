@@ -8,9 +8,9 @@ import {
 } from "../standard";
 import { ParseStateManager, getParseStateManager } from "./parseState";
 
-export abstract class AbstractLanguageServer<
-  T extends Parser & IStardogParser
-> {
+export type LanguageServerParser = Parser & IStardogParser;
+
+export abstract class AbstractLanguageServer<T extends LanguageServerParser> {
   protected readonly documents: lsp.TextDocuments;
   protected readonly parseStateManager: ParseStateManager;
 

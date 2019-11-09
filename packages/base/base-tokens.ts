@@ -1,7 +1,7 @@
 // @ts-ignore: import types for declarations
 import { createToken, Lexer, TokenType } from "chevrotain";
 import { terminals } from "./terminals";
-import { keywords } from "./keywords";
+// import { keywords } from "./keywords";
 
 export const sparqlTokenMap = {
   IRIREF: terminals.IRIREF,
@@ -162,11 +162,11 @@ export const sparqlTokenMap = {
   GreaterThanEquals: createToken({
     name: "GreaterThanEquals",
     pattern: ">="
-  }),
+  })
 
-  SELECT: keywords.SELECT,
-  CONSTRUCT: keywords.CONSTRUCT,
-  DISTINCT: keywords.DISTINCT
+  // SELECT: keywords.SELECT,
+  // CONSTRUCT: keywords.CONSTRUCT,
+  // DISTINCT: keywords.DISTINCT
 };
 
 export const baseTokens = [
@@ -198,9 +198,9 @@ export const baseTokens = [
   sparqlTokenMap.VAR1,
   sparqlTokenMap.VAR2,
   sparqlTokenMap.Comment,
-  sparqlTokenMap.SELECT,
-  sparqlTokenMap.CONSTRUCT,
-  sparqlTokenMap.DISTINCT,
+
+  // keywords
+
   sparqlTokenMap.Star,
   sparqlTokenMap.Period,
   sparqlTokenMap.QuestionMark,
@@ -231,12 +231,3 @@ export const baseTokens = [
 export const pathsTokens = [];
 
 export const nonStandardTokens = [...pathsTokens];
-
-const indexOfSelect = baseTokens.indexOf(sparqlTokenMap.SELECT);
-export const stardogSparqlTokens = [
-  ...baseTokens.slice(0, indexOfSelect),
-  ...nonStandardTokens,
-  ...baseTokens.slice(indexOfSelect)
-];
-
-export const sparqlTokenTypes = [...baseTokens, ...nonStandardTokens];

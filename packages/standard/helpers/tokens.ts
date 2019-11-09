@@ -2,7 +2,7 @@
 import { createToken, Lexer } from "chevrotain";
 import { terminals } from "./terminals";
 
-export const sparqlTokenMap = {
+export const tokenMap = {
   IRIREF: terminals.IRIREF,
   LANGTAG: terminals.LANGTAG,
   INTEGER: terminals.INTEGER,
