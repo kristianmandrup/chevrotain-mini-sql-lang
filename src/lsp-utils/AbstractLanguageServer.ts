@@ -59,19 +59,14 @@ export abstract class AbstractLanguageServer<
     params: lsp.TextDocumentChangeEvent,
     parseResults: ReturnType<AbstractLanguageServer<T>["parseDocument"]>
   ): void;
+
   private handleContentChange(params: lsp.TextDocumentChangeEvent) {
     const { document } = params;
     const { uri } = document;
-    const { cst, errors, tokens, otherParseData } = this.parseDocument(
-      document
-    );
+    const parseResult = this.parseDocument(document);
+    const { cst, tokens } = parseResult;
     this.parseStateManager.saveParseStateForUri(uri, { cst, tokens });
-    return this.onContentChange(params, {
-      cst,
-      errors,
-      tokens,
-      otherParseData
-    });
+    return this.onContentChange(params, parseResult);
   }
 
   handleHover(params: lsp.TextDocumentPositionParams): lsp.Hover {

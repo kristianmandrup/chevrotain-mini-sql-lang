@@ -1,4 +1,4 @@
-import { CstNode, IToken } from 'millan';
+import { CstNode, IToken } from "../standard";
 
 interface InternalParseStateManagerStateForUri {
   latestCst?: CstNode;
@@ -15,7 +15,7 @@ export const getParseStateManager = () => {
 
       return {
         cst: stateForUri.latestCst,
-        tokens: stateForUri.latestTokens,
+        tokens: stateForUri.latestTokens
       };
     },
 
@@ -24,7 +24,7 @@ export const getParseStateManager = () => {
         state[uri] = {};
       }
 
-      Object.keys(nextParseState).forEach((key) => {
+      Object.keys(nextParseState).forEach(key => {
         const stateKey = `latest${key[0].toUpperCase()}${key.slice(1)}`;
         state[uri][stateKey] = nextParseState[key];
       });
@@ -32,12 +32,12 @@ export const getParseStateManager = () => {
 
     clearParseStateForUri(uri: string) {
       state[uri] = {};
-    },
+    }
   };
 };
 
 export interface ParseState {
-  cst: CstNode;
+  cst?: CstNode;
   tokens?: IToken[];
 }
 
