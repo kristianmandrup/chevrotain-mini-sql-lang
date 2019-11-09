@@ -1,4 +1,4 @@
-import { IToken, TokenType } from "../standard";
+import { IToken, TokenType } from "../utils";
 import uniqBy from "lodash.uniqby";
 import { TokenPattern } from "chevrotain";
 

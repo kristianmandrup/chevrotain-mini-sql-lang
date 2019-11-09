@@ -184,6 +184,16 @@ let invalidInput =
 
 ```
 
+### Basic utilities
+
+[Utils](./packages/utils/Utils.md)
+
+## Turtle lang example
+
+### Working with parser namespaces
+
+[Turtle Parser](packages/turtle/TurtleParser.md)
+
 ## VS Code Language extension
 
 Note: Still a WIP - needs more docs, cleanup and refactoring...
@@ -200,10 +210,6 @@ See [VSC Language extension](./VSC-lang-extension.md)
 
 [LSP utils](./packages/lsp-utils/LSP-utils.md)
 
-### Standard helpers
+### Base Language Server
 
-[Standard utils](./packages/standard/Standard.md)
-
-## Working with parser namespaces
-
-[Turtle Parser](packages/turtle/TurtleParser.md)
+[Base Language Server](./packages/base-language-server/src/BaseLanguageServer.md)

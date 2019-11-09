@@ -6,7 +6,7 @@ import {
   IRecognizerContext
 } from "chevrotain";
 
-export interface IStardogParser {
+export interface IStandardParser {
   tokenize: (document: string) => IToken[];
   parse: (
     document: string

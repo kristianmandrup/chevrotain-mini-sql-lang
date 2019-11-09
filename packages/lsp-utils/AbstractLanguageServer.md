@@ -2,7 +2,7 @@
 
 ```ts
 class AbstractLanguageServer <
-  T extends Parser & IStardogParser
+  T extends Parser & IStandardParser
 > {
   protected readonly documents: lsp.TextDocuments;
   protected readonly parseStateManager: ParseStateManager;

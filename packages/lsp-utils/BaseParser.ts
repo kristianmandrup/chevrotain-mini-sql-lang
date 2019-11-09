@@ -1,4 +1,4 @@
-import { tokenTypes } from "../base";
+import { tokenTypes } from "../utils";
 import {
   Parser,
   IParserConfig,
@@ -8,9 +8,9 @@ import {
   IMultiModeLexerDefinition,
   TokenType
 } from "chevrotain";
-import { IStardogParser } from "../standard";
+import { IStandardParser } from "../utils";
 
-export class BaseParser extends Parser implements IStardogParser {
+export class BaseParser extends Parser implements IStandardParser {
   protected lexer: Lexer;
 
   // Parsing Turtle requires that the parser keep a map of namespaces in state.
@@ -33,14 +33,15 @@ export class BaseParser extends Parser implements IStardogParser {
     this.lexer.tokenize(document).tokens;
 
   public parse = (
-    document: string
+    document: string,
+    entryRule = this.rootRule
   ): {
     errors: IRecognitionException[];
     semanticErrors: IRecognitionException[];
     cst: any;
   } => {
     this.input = this.lexer.tokenize(document).tokens;
-    const cst = this.rootRule();
+    const cst = entryRule.call(this);
     // Next two items are copied so that they can be returned/held after parse
     // state is cleared.
     const errors: IRecognitionException[] = [...this.errors];

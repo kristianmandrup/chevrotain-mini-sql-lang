@@ -1,4 +1,4 @@
-import { CstNode, IToken } from "../standard";
+import { CstNode, IToken } from "../utils";
 
 interface InternalParseStateManagerStateForUri {
   latestCst?: CstNode;

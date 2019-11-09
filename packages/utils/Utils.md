@@ -35,6 +35,12 @@ class TraverseContext {
 }
 ```
 
+## Keywords
+
+Takes a list of keywords and generates a map of chevrotain lexer tokens.
+
+`createKeywordTokenList(keywords: string[]) => {[key: string]: IToken}`
+
 ## Matchers
 
 Simple
@@ -92,6 +98,9 @@ Helpers to make it easy to build complext regular expressions.
 - `RCurly` token `}`
 - `LCurly` token `{`
 - `Comment` line content after `#`
+- `WhiteSpace`
+- `TRUE`
+- `FALSE`
 - `Period` token `.`
 - `QuestionMark` token `?`
 - `Plus` token `+`
@@ -113,16 +122,21 @@ Helpers to make it easy to build complext regular expressions.
 - `GreaterThan` token `>`
 - `LessThanEquals` token `<=`
 - `GreaterThanEquals` token `>=`
+- ...
+
+## Token types
+
+List of tokens in precendence order (ie. order of evaulation by lexer)
 
 ## Types
 
-`IStardogParser` is a standard interface for all parsers:
+`IStandardParser` is a standard interface for all parsers:
 
 - `parse(document: string) => { errors: IRecognitionException[]; cst: CstNode }`
 - `tokenize(document: string) => IToken[];`
 
 ```ts
-interface IStardogParser {
+interface IStandardParser {
   tokenize: (document: string) => IToken[];
   parse: (
     document: string

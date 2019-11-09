@@ -1,9 +1,8 @@
 // @ts-ignore: import types for declarations
-import { createToken, Lexer, TokenType } from "chevrotain";
+import { createToken, Lexer } from "chevrotain";
 import { terminals } from "./terminals";
-// import { keywords } from "./keywords";
 
-export const sparqlTokenMap = {
+export const tokenMap = {
   IRIREF: terminals.IRIREF,
   LANGTAG: terminals.LANGTAG,
   INTEGER: terminals.INTEGER,
@@ -42,6 +41,15 @@ export const sparqlTokenMap = {
     pattern: /\s+/,
     group: Lexer.SKIPPED,
     line_breaks: true
+  }),
+  TRUE: createToken({
+    name: "TRUE",
+    pattern: /true/
+  }),
+
+  FALSE: createToken({
+    name: "FALSE",
+    pattern: /false/
   }),
 
   Star: createToken({
@@ -163,71 +171,4 @@ export const sparqlTokenMap = {
     name: "GreaterThanEquals",
     pattern: ">="
   })
-
-  // SELECT: keywords.SELECT,
-  // CONSTRUCT: keywords.CONSTRUCT,
-  // DISTINCT: keywords.DISTINCT
 };
-
-export const baseTokens = [
-  sparqlTokenMap.NIL,
-  sparqlTokenMap.ANON,
-  sparqlTokenMap.LCurly,
-  sparqlTokenMap.RCurly,
-  sparqlTokenMap.LParen,
-  sparqlTokenMap.RParen,
-  sparqlTokenMap.WhiteSpace,
-  sparqlTokenMap.IRIREF,
-  sparqlTokenMap.LANGTAG,
-  sparqlTokenMap.DOUBLE,
-  sparqlTokenMap.DECIMAL,
-  sparqlTokenMap.INTEGER,
-  sparqlTokenMap.DOUBLE_POSITIVE,
-  sparqlTokenMap.DECIMAL_POSITIVE,
-  sparqlTokenMap.INTEGER_POSITIVE,
-  sparqlTokenMap.DOUBLE_NEGATIVE,
-  sparqlTokenMap.DECIMAL_NEGATIVE,
-  sparqlTokenMap.INTEGER_NEGATIVE,
-  sparqlTokenMap.STRING_LITERAL1,
-  sparqlTokenMap.STRING_LITERAL2,
-  sparqlTokenMap.STRING_LITERAL_LONG1,
-  sparqlTokenMap.STRING_LITERAL_LONG2,
-  sparqlTokenMap.PNAME_NS,
-  sparqlTokenMap.PNAME_LN,
-  sparqlTokenMap.BLANK_NODE_LABEL,
-  sparqlTokenMap.VAR1,
-  sparqlTokenMap.VAR2,
-  sparqlTokenMap.Comment,
-
-  // keywords
-
-  sparqlTokenMap.Star,
-  sparqlTokenMap.Period,
-  sparqlTokenMap.QuestionMark,
-  sparqlTokenMap.Plus,
-  sparqlTokenMap.Minus,
-  sparqlTokenMap.LBracket,
-  sparqlTokenMap.RBracket,
-  sparqlTokenMap.PERCENT,
-
-  sparqlTokenMap.Semicolon,
-  sparqlTokenMap.Comma,
-  sparqlTokenMap.ForwardSlash,
-  sparqlTokenMap.DoubleCaret,
-  sparqlTokenMap.Caret,
-  sparqlTokenMap.LogicalOr,
-  sparqlTokenMap.Pipe,
-  sparqlTokenMap.LogicalAnd,
-  sparqlTokenMap.NotEquals,
-  sparqlTokenMap.Bang,
-  sparqlTokenMap.Equals,
-  sparqlTokenMap.LessThanEquals,
-  sparqlTokenMap.GreaterThanEquals,
-  sparqlTokenMap.LessThan,
-  sparqlTokenMap.GreaterThan,
-  sparqlTokenMap.Unknown
-];
-
-export const pathsTokens = [];
-
-export const nonStandardTokens = [...pathsTokens];

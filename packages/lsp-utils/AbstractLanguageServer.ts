@@ -1,14 +1,9 @@
 import * as lsp from "vscode-languageserver";
 import { Parser, IToken } from "chevrotain";
-import {
-  IStardogParser,
-  isCstNode,
-  traverse,
-  ISemanticError
-} from "../standard";
+import { IStandardParser, isCstNode, traverse, ISemanticError } from "../utils";
 import { ParseStateManager, getParseStateManager } from "./parseState";
 
-export type LanguageServerParser = Parser & IStardogParser;
+export type LanguageServerParser = Parser & IStandardParser;
 
 export abstract class AbstractLanguageServer<T extends LanguageServerParser> {
   protected readonly documents: lsp.TextDocuments;
