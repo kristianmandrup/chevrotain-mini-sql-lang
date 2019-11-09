@@ -116,6 +116,11 @@ Helpers to make it easy to build complext regular expressions.
 
 ## Types
 
+`IStardogParser` is a standard interface for all parsers:
+
+- `parse(document: string) => { errors: IRecognitionException[]; cst: CstNode }`
+- `tokenize(document: string) => IToken[];`
+
 ```ts
 interface IStardogParser {
   tokenize: (document: string) => IToken[];
@@ -123,3 +128,35 @@ interface IStardogParser {
     document: string
   ) => { errors: IRecognitionException[]; cst: CstNode };
 ```
+
+`ITokensMap` consist of a list of `IToken` for a given string key.
+
+```ts
+export interface ITokensMap {
+  [key: string]: IToken[];
+}
+```
+
+`ISemanticError` used to flag semantic errors in the parser. Includes:
+
+- `resyncedTokens` a list of `IToken`
+- `context` of `IRecognizerContext`
+
+```ts
+export interface ISemanticError
+  extends Pick<
+    IRecognitionException,
+    Exclude<keyof IRecognitionException, "resyncedTokens" | "context">
+  > {
+  resyncedTokens?: IToken[];
+  context?: IRecognizerContext;
+}
+```
+
+Literal type
+
+`type Lit = string | number | boolean | undefined | null | void | symbol | {};`
+
+Not sure... you tell me ;)
+
+`export const getAsTypedTuple = <T extends Lit[]>(...args: T): T => args;`

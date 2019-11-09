@@ -5,9 +5,13 @@ import {
   MessageReader,
   DataCallback
 } from "vscode-jsonrpc/lib/messageReader";
-import { AbstractMessageWriter, MessageWriter } from "vscode-jsonrpc/lib/messageWriter";
+import {
+  AbstractMessageWriter,
+  MessageWriter
+} from "vscode-jsonrpc/lib/messageWriter";
 
-export class WorkerMessageReader extends AbstractMessageReader implements MessageReader {
+export class WorkerMessageReader extends AbstractMessageReader
+  implements MessageReader {
   constructor(private ctx: Worker) {
     super();
   }
@@ -16,7 +20,8 @@ export class WorkerMessageReader extends AbstractMessageReader implements Messag
   }
 }
 
-export class WorkerMessageWriter extends AbstractMessageWriter implements MessageWriter {
+export class WorkerMessageWriter extends AbstractMessageWriter
+  implements MessageWriter {
   constructor(private ctx: Worker) {
     super();
   }
