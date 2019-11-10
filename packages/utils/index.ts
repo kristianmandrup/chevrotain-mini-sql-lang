@@ -6,3 +6,5 @@ export * from "./tokens";
 export * from "./token-types";
 export * from "./types";
 export * from "./unescape";
+export * from "./create-token-map";
+export * from "./syntax-gen";

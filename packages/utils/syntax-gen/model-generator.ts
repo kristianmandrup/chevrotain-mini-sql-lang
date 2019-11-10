@@ -41,7 +41,7 @@ export const withSyntaxModeller = clazz => {
     this._syntaxModel = this._syntaxModel || new SyntaxModel();
   };
 
-  clazz.prototype.consume = function(tokenRef, opts = {}) {
+  clazz.prototype.consumeStx = function(tokenRef, opts = {}) {
     const token = this.tokenFor(tokenRef);
     this.CONSUME(token);
     this.syntaxModel.consume(tokenRef, opts);
@@ -49,6 +49,13 @@ export const withSyntaxModeller = clazz => {
 
   clazz.prototype.syntax = function(repoKey, syntaxName, opts: any = {}) {
     this.syntaxModel.syntax(repoKey, syntaxName, opts);
+  };
+
+  clazz.prototype.tokenFor = function(tokenName) {
+    const tokenMapEntry = this.tokenMap[tokenName];
+    return tokenMapEntry
+      ? tokenMapEntry.token
+      : this.error(`No such token ${tokenName}`);
   };
 
   return clazz;

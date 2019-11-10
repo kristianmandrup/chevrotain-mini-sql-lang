@@ -556,21 +556,25 @@ Syntax based on parser rules:
 Perhaps we could have the parser build a model (as the api is used). The model can then be used to generate a syntax structure as output. This syntax output should be able to get the developer 90-95% of the way.
 
 ```ts
-const tokenMap = createTokens({
+const tokenMap = createTokenMap({
   Identifier: { name: "Identifier", pattern: /[a-zA-Z]\w*/ },
   From: { name: "From", pattern: /FROM/, matches: 'FROM', longer_alt: '#Identifier'},
   Where: { name: "Where", pattern: /WHERE/, matches: 'WHERE', longer_alt: Identifier }
 })
 ```
 
+`createTokenMap` can be found in `utils/create-token-map`
+
+Parser using `consumeStx` and `syntax` to generate a `SyntaxModel`
+
 ```ts
     $.RULE("fromClause", () => {
-      $.consume('From', {type: 'control-statement', matches: 'From' });
-      $.consume('Identifier', {type: 'var-ref', partOf: 'expression'})
+      $.consumeStx('From', {type: 'control-statement', matches: 'From' });
+      $.consumeStx('Identifier', {type: 'var-ref', partOf: 'expression'})
     });
 
     $.rule("whereClause", () => {
-      $.consume('Where', {type: 'control-statement', matches: 'Where'});
+      $.consumeStx('Where', {type: 'control-statement', matches: 'Where'});
       $.SUBRULE($.expression);
     });
 
@@ -582,8 +586,10 @@ const tokenMap = createTokens({
     // ...
 ```
 
+The syntax model wrappers
+
 ```ts
-consume = (tokenRef, opts = {}) => {
+consumeStx = (tokenRef, opts = {}) => {
   this.CONSUME(this.tokenFor(tokenRef))
   this.addToModel(tokenRef, opts)
 }
