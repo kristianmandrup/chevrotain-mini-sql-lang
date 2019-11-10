@@ -1,1 +1,59 @@
-{}
+{
+  "fileTypes": ["sqlx"],
+  "name": "sqlx",
+  "patterns": [
+    {
+      "include": "#expression"
+    }
+  ],
+  "repository": {
+    "select": {
+      "match": "\\s*(?i)(SELECT)\\b",
+      "name": "keyword.select.sqlx"
+    },
+    "from": {
+      "match": "\\s*(?i)(FROM)\\b",
+      "name": "keyword.where.sqlx"
+    },
+    "where": {
+      "match": "\\s*(?i)(WHERE)\\b",
+      "name": "keyword.where.sqlx",
+      "patterns": [
+        {
+          "include": "#relational-operator"
+        }
+      ]
+    },
+    "relational-operator": {
+      "match": "=",
+      "name": "keyword.operator.assignment.sqlx"
+    },
+    "comment-line": {
+      "match": "(#).*$\\n?",
+      "name": "comment.line.sqlx"
+    },
+    "comment": {
+      "name": "comment.sqf",
+      "patterns": [
+        {
+          "include": "#comment-line"
+        }
+      ]
+    },
+    "expression": {
+      "name": "meta.expression.sqlx",
+      "patterns": [
+        {
+          "include": "#select"
+        },
+        {
+          "include": "#where"
+        },
+        {
+          "include": "#comment"
+        }
+      ]
+    }
+  },
+  "scopeName": "source.sqlx"
+}
