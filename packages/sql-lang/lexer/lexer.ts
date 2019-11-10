@@ -1,4 +1,3 @@
-import * as chevrotain from "chevrotain";
 import { createToken, Lexer } from "chevrotain";
 
 // the vocabulary will be exported and used in the Parser definition.

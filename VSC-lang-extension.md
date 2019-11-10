@@ -336,6 +336,101 @@ The comment grammar definition simple says that either of the patterns `comment-
   },
 ```
 
+## Mini Sql syntax definition
+
+The following is the syntax definition for the mini SQL language. Notice that the keys
+for the `repository` entries match the rules in the SqlParser such as `atomic-expression` for `atomicExpression` and so on. Also notice that the patterns match the subrules for each rule.
+
+```json
+{
+  "fileTypes": ["sqlx"],
+  "name": "sqlx",
+  "patterns": [
+    {
+      "include": "#expression"
+    }
+  ],
+  "repository": {
+    "atomic-expression": {
+      "name": "meta.expression.atomic.sqlx",
+      "patterns": [
+        {
+          "include": "#var-ref"
+        },
+        {
+          "include": "#relational-operator"
+        },
+        {
+          "include": "#numeric-literal"
+        }
+      ]
+    },
+    "var-ref": {
+      "match": "(\\s*)(_+[a-zA-Z_0-9]+)",
+      "name": "variable.other.private.sqlx"
+    },
+    "numeric-literal": {
+      "match": "\\s*(?<=[^$])((0(x|X)[0-9a-fA-F]+)|([0-9]+(\\.[0-9]+)?))\\b",
+      "name": "constant.numeric.sqf"
+    },
+
+    "select-clause": {
+      "match": "\\s*(?i)(SELECT)\\b",
+      "name": "keyword.select.sqlx",
+      "patterns": [
+        {
+          "include": "#from"
+        },
+        {
+          "include": "#where"
+        }
+      ]
+    },
+    "from": {
+      "match": "\\s*(?i)(FROM)\\b",
+      "name": "keyword.where.sqlx"
+    },
+    "where": {
+      "match": "\\s*(?i)(WHERE)\\b",
+      "name": "keyword.where.sqlx",
+      "patterns": [
+        {
+          "include": "#atomic-expression"
+        }
+      ]
+    },
+    "relational-operator": {
+      "match": "=",
+      "name": "keyword.operator.assignment.sqlx"
+    },
+    "comment-line": {
+      "match": "(#).*$\\n?",
+      "name": "comment.line.sqlx"
+    },
+    "comment": {
+      "name": "comment.sqf",
+      "patterns": [
+        {
+          "include": "#comment-line"
+        }
+      ]
+    },
+    "expression": {
+      "name": "meta.expression.sqlx",
+      "patterns": [
+        {
+          "include": "#select"
+        },
+        {
+          "include": "#comment"
+        }
+      ]
+    }
+  },
+  "scopeName": "source.sqlx"
+}
+```
+
 ## Language Server Protocol (LSP)
 
 - [Chevrotain Language Server guide issue](https://github.com/SAP/chevrotain/issues/921#)
@@ -396,3 +491,214 @@ Clone [this repo](https://github.com/gctse/syntax-highlighting-VS-Code-example) 
 ### Conclusion
 
 It should be possible to create a wrapper using a set of conventions, to make it easy to create the language configuration and grammar for VC Code directly from a Chevrotain lexer/parser definition using shared lookup maps that declaratively defines the basic language schematics.
+
+Parser rules
+
+```ts
+    $.RULE("fromClause", () => {
+      $.CONSUME(From);
+      $.CONSUME(Identifier);
+    });
+
+    $.RULE("whereClause", () => {
+      $.CONSUME(Where);
+      $.SUBRULE($.expression);
+    });
+```
+
+Tokens
+
+```ts
+const Identifier = createToken({ name: "Identifier", pattern: /_+[a-zA-Z_0-9]+/ });
+// ...
+```
+
+Syntax based on parser rules:
+
+```json
+{
+    "var-ref": {
+      "match": "(\\s*)(_+[a-zA-Z_0-9]+)",
+      "name": "variable.other.private.sqlx"
+    },
+    "numeric-literal": {
+      "match": "\\s*(?<=[^$])((0(x|X)[0-9a-fA-F]+)|([0-9]+(\\.[0-9]+)?))\\b",
+      "name": "constant.numeric.sqf"
+    },
+    "control-statement": {
+      "match": "\\s*(?i)(SELECT|FROM|WHERE)\\b",
+      "name": "keyword.where.sqlx",
+    },  
+    "expression": {
+      "name": "meta.expression.sqlx",
+      "patterns": [
+        {
+          "include": "#control-statement"
+        },
+        {
+          "include": "#comment"
+        },
+        {
+          "include": "#var-ref"
+        },
+        {
+          "include": "#relational-operator"
+        },
+        {
+          "include": "#numeric-literal"
+        }
+      ]
+    }
+    // ...
+}
+```
+
+Perhaps we could have the parser build a model (as the api is used). The model can then be used to generate a syntax structure as output. This syntax output should be able to get the developer 90-95% of the way.
+
+```ts
+const tokenMap = createTokens({
+  Identifier: { name: "Identifier", pattern: /[a-zA-Z]\w*/ },
+  From: { name: "From", pattern: /FROM/, matches: 'FROM', longer_alt: '#Identifier'},
+  Where: { name: "Where", pattern: /WHERE/, matches: 'WHERE', longer_alt: Identifier }
+})
+```
+
+```ts
+    $.RULE("fromClause", () => {
+      $.consume('From', {type: 'control-statement', matches: 'From' });
+      $.consume('Identifier', {type: 'var-ref', partOf: 'expression'})
+    });
+
+    $.rule("whereClause", () => {
+      $.consume('Where', {type: 'control-statement', matches: 'Where'});
+      $.SUBRULE($.expression);
+    });
+
+    // could have default mapping using conventions, then allow overrides
+    // warn if no syntax mapping defined
+    $.syntax('expression', 'meta.expression', {references: ['control-statement'], root: true})
+    $.syntax('var-ref', 'variable.other.private')
+    $.syntax('control-statement', 'keyword.control')
+    // ...
+```
+
+```ts
+consume = (tokenRef, opts = {}) => {
+  this.CONSUME(this.tokenFor(tokenRef))
+  this.addToModel(tokenRef, opts)
+}
+
+const toArray = (entry) => Array.isArray(entry) ? entry : [entry]
+
+addToModel = (tokenRef, opts) => {
+  let { type, matches, partOf } = opts
+  matches = toArray(matches)
+  partOf = toArray(partOf)
+  
+  const existingSyntax = (syntaxModel[type] || {}).syntax
+  existingSyntax.matches = existingSyntax.matches || []
+  existingSyntax.partOf = existingSyntax.partOf || []
+
+  const typeEntry = {
+    syntax: {
+      matches: [...existingSyntax.matches, ...matches],
+      partOf: [...existingSyntax.partOf, ...partOf]
+    }
+  }
+  this.syntaxModel[type] = typeEntry
+}
+
+syntax = (repoKey, syntaxName, opts = {}) => {
+  const { references, root } = opts
+  const syntax = {
+    name: syntaxName,
+    references,
+    root
+  }
+  const existingSyntax = (syntaxModel[type] || {}).syntax
+  this.syntaxModel[repoKey] = {
+    syntax: {
+      ...existingSyntax,
+      ...syntax
+    }
+  }
+}
+```
+
+This could generate a rule model:
+
+```ts
+{
+  'var-ref': {
+    syntax: {
+      name: 'variable.other.private',
+      matches: /[a-zA-Z]\w*/,
+      in: 'expression'
+    }
+  },
+  'control-statement': {
+    syntax: {
+      name: 'keyword.control',
+      matches: ['FROM', 'WHERE'], // based on referenced token matches values
+      in: 'expression',
+    }
+  },
+  'expression': {
+    references: ['control-statement', 'var-ref']
+  }
+}
+```
+
+Which generates:
+
+```ts
+{
+  // ...
+    "var-ref": {
+      "match": "(\\s*)(_+[a-zA-Z_0-9]+)",
+      "name": "variable.other.private.sqlx"
+    },
+  "control-statement": {
+    "match": "\\s*(?i)(SELECT|FROM|WHERE)\\b",
+    "name": "keyword.where.sqlx",
+  },  
+  "expression": {
+    "name": "meta.expression.sqlx",
+    "patterns": [
+      {
+        "include": "#control-statement"
+      },
+      {
+        "include": "#var-ref"
+      },
+      // ...
+    ]
+  }
+}
+```
+
+See `utils/syntax-gen` for utility functions that support generating a syntax model from such a model.
+
+- `generateRepo(data, opts)`
+- `generateSyntax(data, opts)`
+- `generateSyntaxJson(data, opts)`
+
+## Add SyntaxModel to Parser
+
+See `utils/syntax-gen/model-gen`
+
+`const MyParser = withSyntaxModeller($MyParser)`
+
+This will add the special `consume` and `syntax` methods to your Parser.
+
+To use the full syntax infrastructure:
+
+```ts
+const parser = new Parser(...args)
+parser.parse(doc)
+const { model } = parser.syntaxModel
+const syntaxJsonStr = generateSyntaxJson(model)
+// write to syntax file
+```
+
+Cross your fingers that it works!

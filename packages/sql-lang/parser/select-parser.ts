@@ -1,15 +1,17 @@
 import { CstParser } from "chevrotain";
-import { tokenVocabulary } from "../lexer/lexer";
+import { tokenVocabulary } from "../lexer";
 
 // individual imports, prefer ES6 imports if supported in your runtime/transpiler...
-const Select = tokenVocabulary.Select;
-const From = tokenVocabulary.From;
-const Where = tokenVocabulary.Where;
-const Identifier = tokenVocabulary.Identifier;
-const Integer = tokenVocabulary.Integer;
-const GreaterThan = tokenVocabulary.GreaterThan;
-const LessThan = tokenVocabulary.LessThan;
-const Comma = tokenVocabulary.Comma;
+const {
+  Select,
+  From,
+  Where,
+  Identifier,
+  Integer,
+  GreaterThan,
+  LessThan,
+  Comma
+} = tokenVocabulary;
 
 export class SelectParser extends CstParser {
   constructor() {
