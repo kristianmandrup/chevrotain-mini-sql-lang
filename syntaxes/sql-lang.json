@@ -7,9 +7,40 @@
     }
   ],
   "repository": {
-    "select": {
+    "atomic-expression": {
+      "name": "meta.expression.atomic.sqlx",
+      "patterns": [
+        {
+          "include": "#var-ref"
+        },
+        {
+          "include": "#relational-operator"
+        },
+        {
+          "include": "#numeric-literal"
+        }
+      ]
+    },
+    "var-ref": {
+      "match": "(\\s*)(_+[a-zA-Z_0-9]+)",
+      "name": "variable.other.private.sqlx"
+    },
+    "numeric-literal": {
+      "match": "\\s*(?<=[^$])((0(x|X)[0-9a-fA-F]+)|([0-9]+(\\.[0-9]+)?))\\b",
+      "name": "constant.numeric.sqf"
+    },
+
+    "select-clause": {
       "match": "\\s*(?i)(SELECT)\\b",
-      "name": "keyword.select.sqlx"
+      "name": "keyword.select.sqlx",
+      "patterns": [
+        {
+          "include": "#from"
+        },
+        {
+          "include": "#where"
+        }
+      ]
     },
     "from": {
       "match": "\\s*(?i)(FROM)\\b",
@@ -20,7 +51,7 @@
       "name": "keyword.where.sqlx",
       "patterns": [
         {
-          "include": "#relational-operator"
+          "include": "#atomic-expression"
         }
       ]
     },
@@ -45,9 +76,6 @@
       "patterns": [
         {
           "include": "#select"
-        },
-        {
-          "include": "#where"
         },
         {
           "include": "#comment"
