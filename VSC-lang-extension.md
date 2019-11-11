@@ -565,7 +565,9 @@ const tokenMap = createTokenMap({
 
 `createTokenMap` can be found in `utils/create-token-map`
 
-Parser using `consumeStx` and `syntax` to generate a `SyntaxModel`
+Parser using `consumeStx`, `subruleStx` and `syntax` to generate a `SyntaxModel`
+
+Note: In order for the syntax model to be generated, you will need to feed it a test document to parse which triggers all the rules that act to create the syntax model!
 
 ```ts
     $.RULE("fromClause", () => {
@@ -626,39 +628,19 @@ consumeStx = (tokenRef, opts = {}) => {
   this.addToModel(tokenRef, opts)
 }
 
-const toArray = (entry) => Array.isArray(entry) ? entry : [entry]
-
 addToModel = (tokenRef, opts) => {
   let { type, matches, partOf } = opts
-  matches = toArray(matches)
-  partOf = toArray(partOf)
-  
-  const existingSyntax = (syntaxModel[type] || {}).syntax
-  existingSyntax.matches = existingSyntax.matches || []
-  existingSyntax.partOf = existingSyntax.partOf || []
 
   const typeEntry = {
-    syntax: {
-      matches: [...existingSyntax.matches, ...matches],
-      partOf: [...existingSyntax.partOf, ...partOf]
-    }
+    //...
   }
   this.syntaxModel[type] = typeEntry
 }
 
 syntax = (repoKey, syntaxName, opts = {}) => {
   const { references, root } = opts
-  const syntax = {
-    name: syntaxName,
-    references,
-    root
-  }
-  const existingSyntax = (syntaxModel[type] || {}).syntax
   this.syntaxModel[repoKey] = {
-    syntax: {
-      ...existingSyntax,
-      ...syntax
-    }
+    // ...
   }
 }
 ```
@@ -667,6 +649,17 @@ This could generate a rule model:
 
 ```ts
 {
+  'scope-block': {
+    block: true,
+    beginToken: {
+      matches: '{',
+      name: 'meta.brace.curly'
+    },
+    endToken: {
+      matches: '}',
+      name: 'meta.brace.curly'
+    }
+  },
   'var-ref': {
     syntax: {
       name: 'variable.other.private',
@@ -682,7 +675,9 @@ This could generate a rule model:
     }
   },
   'expression': {
-    references: ['control-statement', 'var-ref']
+    references: ['control-statement', 'var-ref'],
+    partOf: ['block'],
+    root: true
   }
 }
 ```
