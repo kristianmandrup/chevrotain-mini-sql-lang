@@ -17,12 +17,7 @@
     },
     "control-statement": {
       "match": "\\s*(?i)(SELECT|FROM|WHERE)\\b",
-      "name": "keyword.where.sqlx",
-      "patterns": [
-        {
-          "include": "#var-ref"
-        }
-      ]
+      "name": "keyword.where.sqlx"
     },
     "relational-operator": {
       "match": "=",

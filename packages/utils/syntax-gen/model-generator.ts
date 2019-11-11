@@ -1,8 +1,10 @@
+import { escapeRegExp } from "../regex";
+
 export class SyntaxModel {
   model: any = {};
 
   consume = opts => {
-    let { type, matches, partOf } = opts;
+    let { type, matches, partOf, begin, end, block } = opts;
     matches = toArray(matches);
     partOf = toArray(partOf);
 
@@ -10,10 +12,44 @@ export class SyntaxModel {
     existingSyntax.matches = existingSyntax.matches || [];
     existingSyntax.partOf = existingSyntax.partOf || [];
 
+    if (partOf) {
+      const partOfObj = (this.model[partOf] = this.model[partOf] || {});
+      partOfObj.references = partOfObj.references || [];
+      partOfObj.references.push(type);
+      this.model[partOf] = partOfObj;
+    }
+    let beginToken, endToken;
+
+    const syntax: any = {};
+
+    if (block) {
+      syntax.block = true;
+      if (begin) {
+        beginToken = {
+          matches,
+          name: begin
+        };
+      }
+      if (end) {
+        endToken = {
+          matches,
+          name: end
+        };
+      }
+    }
+
+    matches = [...existingSyntax.matches, ...matches];
+    partOf = [...existingSyntax.partOf, ...partOf];
+    if (beginToken) {
+      syntax.beginToken = beginToken;
+    }
+    if (endToken) {
+      syntax.endToken = endToken;
+    }
     const typeEntry = {
       syntax: {
-        matches: [...existingSyntax.matches, ...matches],
-        partOf: [...existingSyntax.partOf, ...partOf]
+        matches,
+        partOf
       }
     };
     this.model[type] = typeEntry;

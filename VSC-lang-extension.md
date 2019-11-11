@@ -578,12 +578,44 @@ Parser using `consumeStx` and `syntax` to generate a `SyntaxModel`
       $.SUBRULE($.expression);
     });
 
+    $.rule("block", () => {
+      const ctx = {type: 'scope-block', block: true}
+      const stxName = 'meta.brace.curly'
+      $.consumeStx('LBrace', {...ctx, matches: '{', begin: stxName});
+      $.subruleStx('expression', {...ctx, matches: 'expression'});
+      $.consumeStx('RBrace', {...ctx, matches: '}', end: stxName})
+    });
+
     // could have default mapping using conventions, then allow overrides
     // warn if no syntax mapping defined
     $.syntax('expression', 'meta.expression', {references: ['control-statement'], root: true})
     $.syntax('var-ref', 'variable.other.private')
     $.syntax('control-statement', 'keyword.control')
     // ...
+```
+
+The `block` rule should generate a syntax like:
+
+```json
+{
+  "begin": "\\{",
+  "beginCaptures": {
+      "0": {
+          "name": "meta.brace.curly.sqf"
+      }
+  },
+  "end": "\\}",
+  "endCaptures": {
+      "0": {
+          "name": "meta.brace.curly.sqf"
+      }
+  },
+  "patterns": [
+    {
+      "include": "#expression"
+    }
+  ]
+}
 ```
 
 The syntax model wrappers
