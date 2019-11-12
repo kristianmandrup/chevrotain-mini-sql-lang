@@ -1,7 +1,7 @@
-import { generateSyntax } from "./gen-syntax";
+import { generateRepo } from "./gen-repo";
 const context = describe;
 
-describe("generateSyntax", () => {
+describe("generateRepo", () => {
   const data = [
     {
       type: "root",
@@ -21,7 +21,7 @@ describe("generateSyntax", () => {
   ];
   context("empty opts", () => {
     it("throws", () => {
-      expect(generateSyntax(data, { name: "sqlx", ext: "sqlx" })).toEqual({
+      expect(generateRepo(data, { name: "sqlx", ext: "sqlx" })).toEqual({
         name: "sqlx",
         scopeName: "source.sqlx",
         repository: {
