@@ -42,7 +42,7 @@ describe("withSyntaxModeller", () => {
 
     describe("syntaxModel", () => {
       it("is an instance of SyntaxModel", () => {
-        expect(parser.syntaxModel()).toBeDefined();
+        expect(parser.stxModel()).toBeDefined();
       });
     });
 
@@ -53,12 +53,12 @@ describe("withSyntaxModeller", () => {
           partOf: "expression",
           matches: "when"
         };
+        parser.parserOff();
         parser.consumeStx("when", syntaxDef);
-        const model = parser.syntaxModel();
-        console.log("consume", { model });
+        const model = parser.stxModel();
         const { condition } = model;
-        expect(condition).toEqual({
-          matches: "when"
+        expect(condition.syntax).toEqual({
+          matches: ["when"]
         });
       });
     });
@@ -70,11 +70,11 @@ describe("withSyntaxModeller", () => {
         const opts = {
           references: ["when", "from"]
         };
+        parser.parserOff();
         parser.syntax(repoKey, syntaxName, opts);
-        const model = parser.syntaxModel();
-        console.log("syntax", { model });
+        const model = parser.stxModel();
         const { clause } = model;
-        expect(clause).toEqual({
+        expect(clause.syntax).toEqual({
           name: "when",
           references: ["when", "from"]
         });

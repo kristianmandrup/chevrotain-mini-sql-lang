@@ -1,7 +1,11 @@
 import merge from "deepmerge";
 import uniq from "array-uniq";
 
-export const createSyntax = model => (repoKey, syntaxName, opts: any = {}) => {
+export const createSyntax = model => (
+  repoKey,
+  syntaxName,
+  opts: any = {}
+): any => {
   const { references, root } = opts;
   let syntax: any = {
     name: syntaxName
@@ -18,7 +22,9 @@ export const createSyntax = model => (repoKey, syntaxName, opts: any = {}) => {
   if (syntax.references) {
     syntax.references = uniq(syntax.references);
   }
+
   model[repoKey] = {
     syntax
   };
+  return model;
 };

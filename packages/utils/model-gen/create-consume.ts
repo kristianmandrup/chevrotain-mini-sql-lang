@@ -1,6 +1,6 @@
 import uniq from "array-uniq";
 
-export const createConsume = (model: any) => (opts: any = {}): void => {
+export const createConsume = (model: any) => (opts: any = {}): any => {
   let { type, matches, partOf, begin, end, block } = opts;
 
   const syntax: any = {};
@@ -55,6 +55,7 @@ export const createConsume = (model: any) => (opts: any = {}): void => {
     syntax
   };
   model[type] = typeEntry;
+  return model;
 };
 
 export const toArray = entry => (Array.isArray(entry) ? entry : [entry]);
