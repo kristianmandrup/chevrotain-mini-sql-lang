@@ -6,4 +6,3 @@ export * from "./index.d";
 export * from "./language-services";
 export * from "./namespaceUtils";
 export * from "./parseState";
-export * from "./worker";

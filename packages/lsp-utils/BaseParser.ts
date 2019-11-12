@@ -59,7 +59,7 @@ export class BaseParser extends Parser implements IStandardParser {
     config?: Partial<IParserConfig>,
     tokens = tokenTypes,
     lexerDefinition: TokenType[] | IMultiModeLexerDefinition = tokens,
-    performSelfAnalysis = true
+    performSelfAnalysis = false
   ) {
     super(tokens, {
       outputCst: true,
