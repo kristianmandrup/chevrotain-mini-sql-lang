@@ -1,4 +1,4 @@
-import { createConsume } from "../model-generator";
+import { createConsume } from "../create-consume";
 
 const context = describe;
 
