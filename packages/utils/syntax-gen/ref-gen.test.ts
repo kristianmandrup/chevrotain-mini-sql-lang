@@ -1,4 +1,4 @@
-import { generateRefObj } from "./gen-ref";
+import { generateRefObj } from "./ref-gen";
 const context = describe;
 
 describe("generateRefObj", () => {

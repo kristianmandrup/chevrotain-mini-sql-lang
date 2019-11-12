@@ -97,4 +97,4 @@ export const withSyntaxModeller = clazz => {
   return clazz;
 };
 
-const toArray = entry => (Array.isArray(entry) ? entry : [entry]);
+export const toArray = entry => (Array.isArray(entry) ? entry : [entry]);

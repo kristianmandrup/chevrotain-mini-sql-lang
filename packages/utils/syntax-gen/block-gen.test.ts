@@ -1,21 +1,30 @@
-import { generateBlockObj } from "./gen-block";
+import { generateBlockObj } from "./block-gen";
 const context = describe;
 
 describe("generateBlockObj", () => {
   const data = [
     {
       syntax: {
+        type: "block",
         block: true,
-        beginToken: "{",
-        endToken: "}",
-        name: "meta.brace.curly",
+        beginToken: {
+          name: "meta.brace.curly",
+          matches: "{"
+        },
+        endToken: {
+          name: "meta.brace.curly",
+          matches: "}"
+        },
+        name: "block",
         references: "expression"
       }
     }
   ];
   context("block data", () => {
     it("create block object", () => {
-      expect(generateBlockObj(data, { ext: "sqlx" })).toEqual({
+      const result = generateBlockObj(data, { ext: "sqlx" });
+      expect(result["block"]).toEqual({
+        name: "block.sqlx",
         begin: "\\{",
         beginCaptures: {
           0: "meta.brace.curly.sqlx"

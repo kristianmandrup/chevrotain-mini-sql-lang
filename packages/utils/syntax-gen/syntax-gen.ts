@@ -1,6 +1,6 @@
 import { GenerateRepoOpts } from "./types";
 import { warn } from "./util";
-import { generateRepo } from "./gen-repo";
+import { generateRepo } from "./repo-gen";
 
 export const generateSyntax = (data, opts: GenerateRepoOpts) => {
   let { fileTypes, name, main, scopeName } = opts;

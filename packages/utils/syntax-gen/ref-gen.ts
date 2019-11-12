@@ -1,5 +1,7 @@
+import { toArray } from "./util";
+
 export const createPatternRefs = (list: any[]) =>
-  (list || []).reduce((acc, refName) => {
+  toArray(list).reduce((acc, refName) => {
     acc.push({
       include: `#${refName}`
     });

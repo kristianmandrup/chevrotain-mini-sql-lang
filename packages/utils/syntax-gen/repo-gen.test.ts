@@ -1,4 +1,4 @@
-import { generateRepo } from "./gen-repo";
+import { generateRepo } from "./repo-gen";
 const context = describe;
 
 describe("generateRepo", () => {

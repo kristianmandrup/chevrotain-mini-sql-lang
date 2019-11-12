@@ -1,4 +1,4 @@
-import { generateSyntax } from "./gen-syntax";
+import { generateSyntax } from "./syntax-gen";
 const context = describe;
 
 describe("generateSyntax", () => {
