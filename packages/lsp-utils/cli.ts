@@ -1,4 +1,3 @@
-export * from "./common";
 import * as yargs from "yargs";
 import { createConnection, IConnection } from "vscode-languageserver";
 import {

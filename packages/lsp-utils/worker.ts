@@ -1,4 +1,3 @@
-export * from "./common";
 import { createConnection } from "vscode-languageserver";
 import {
   AbstractMessageReader,

@@ -14,3 +14,5 @@ export const createKeywordTokenList = (keywords: string[]): any => {
     return acc;
   }, {});
 };
+
+export const keywords = createKeywordTokenList(["WHEN", "SELECT"]);

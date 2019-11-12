@@ -1,6 +1,6 @@
-import { keywords as sparqlKeywords } from "../sparql";
+import { keywords as sparqlKeywords } from "../utils";
 import { regexPatternToString } from "./language-services";
-import { TokenType, TokenPattern } from "chevrotain";
+import { TokenType } from "chevrotain";
 
 // TokenType
 const getTokenDisplayName = (token: TokenType) => {
