@@ -1,4 +1,4 @@
-import { generateMatchObj } from "./match-gen";
+import { generateMatchObj } from "../match-gen";
 const context = describe;
 
 describe("generateMatchObj", () => {

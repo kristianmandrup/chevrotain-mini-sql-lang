@@ -1,4 +1,4 @@
-import { generateBlockObj } from "./block-gen";
+import { generateBlockObj } from "../block-gen";
 const context = describe;
 
 describe("generateBlockObj", () => {

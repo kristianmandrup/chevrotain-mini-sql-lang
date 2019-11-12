@@ -1,11 +1,21 @@
 export const createConsume = (model: any) => (opts: any = {}): void => {
   let { type, matches, partOf, begin, end, block } = opts;
+
+  const syntax: any = {};
+
   matches = toArray(matches);
   partOf = toArray(partOf);
 
-  const existingSyntax = (model[type] || {}).syntax;
-  existingSyntax.matches = existingSyntax.matches || [];
+  const existingSyntax = (model[type] || {}).syntax || {};
+
   existingSyntax.partOf = existingSyntax.partOf || [];
+  existingSyntax.matches = existingSyntax.matches || [];
+
+  if (!block) {
+    existingSyntax.matches = existingSyntax.matches || [];
+    matches = [...existingSyntax.matches, ...matches];
+    syntax.matches = matches;
+  }
 
   if (partOf) {
     const partOfObj = (model[partOf] = model[partOf] || {});
@@ -14,8 +24,6 @@ export const createConsume = (model: any) => (opts: any = {}): void => {
     model[partOf] = partOfObj;
   }
   let beginToken, endToken;
-
-  const syntax: any = {};
 
   if (block) {
     syntax.block = true;
@@ -33,7 +41,6 @@ export const createConsume = (model: any) => (opts: any = {}): void => {
     }
   }
 
-  matches = [...existingSyntax.matches, ...matches];
   partOf = [...existingSyntax.partOf, ...partOf];
   if (beginToken) {
     syntax.beginToken = beginToken;
@@ -41,11 +48,9 @@ export const createConsume = (model: any) => (opts: any = {}): void => {
   if (endToken) {
     syntax.endToken = endToken;
   }
+
   const typeEntry = {
-    syntax: {
-      matches,
-      partOf
-    }
+    syntax
   };
   model[type] = typeEntry;
 };
