@@ -9,15 +9,20 @@ describe("generateMatchObj", () => {
     });
   });
 
-  context("valid item", () => {
+  context.only("valid item", () => {
     const data = [
       {
+        type: "when",
         name: "meta.keyword",
         matches: "when"
       }
     ];
     it("creates syntax object", () => {
-      expect(generateMatchObj(data, { ext: "sqlx" })).toEqual({});
+      const result = generateMatchObj(data, { ext: "sqlx" });
+      expect(result["when"]).toEqual({
+        match: "when",
+        name: "meta.keyword.sqlx"
+      });
     });
   });
 

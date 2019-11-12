@@ -4,13 +4,15 @@ const context = describe;
 describe("generateRefObj", () => {
   const data = [
     {
+      type: "root",
       name: "root",
       references: ["expression"]
     }
   ];
   context("empty list", () => {
     it("empty obj", () => {
-      expect(generateRefObj(data, { ext: "sqlx" })).toEqual({
+      const result = generateRefObj(data, { ext: "sqlx" });
+      expect(result["root"]).toEqual({
         name: "root.sqlx",
         patterns: [
           {

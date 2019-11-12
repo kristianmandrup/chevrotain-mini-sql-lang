@@ -1,18 +1,24 @@
 import { error } from "./util";
 import { createOrMatchesPattern } from "./util";
 
-export const generateMatchObj = (data, opts) =>
-  Object.keys(data).reduce((acc, key) => {
-    const obj = data[key];
-    const { name, matches } = obj.syntax || obj;
+export interface MatchType {
+  type: string;
+  name: string;
+  matches: string[] | string;
+}
+
+export const generateMatchObj = (data: any[], opts) =>
+  data.reduce((acc, obj: any) => {
+    const $obj: MatchType = obj.syntax || obj;
+    const { type, name, matches } = $obj;
     if (!name) error("generateSyntaxObj: missing name", obj);
     const match = Array.isArray(matches)
-      ? createOrMatchesPattern(matches, obj.syntax)
+      ? createOrMatchesPattern(matches, $obj)
       : matches;
     const entry = {
       name: `${name}.${opts.ext}`,
       match
     };
-    acc[key] = entry;
+    acc[type] = entry;
     return acc;
   }, {});

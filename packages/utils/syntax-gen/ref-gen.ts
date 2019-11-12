@@ -8,13 +8,19 @@ export const createPatternRefs = (list: any[]) =>
     return acc;
   }, []);
 
-export const generateRefObj = (data, opts) =>
-  Object.keys(data).reduce((acc, key) => {
-    const obj = data[key];
+export interface RefType {
+  type: string;
+  name: string;
+  references: string[];
+}
+
+export const generateRefObj = (data: RefType[], opts) =>
+  data.reduce((acc, obj: RefType) => {
+    const { name, type } = obj;
     const patterns = createPatternRefs(obj.references);
     // console.log(obj, opts);
-    acc[key] = {
-      name: `${obj.name}.${opts.ext}`,
+    acc[type] = {
+      name: `${name}.${opts.ext}`,
       patterns
     };
 

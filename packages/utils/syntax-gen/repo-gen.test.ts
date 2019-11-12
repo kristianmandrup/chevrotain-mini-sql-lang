@@ -10,30 +10,48 @@ describe("generateRepo", () => {
     },
     {
       syntax: {
-        type: "",
+        type: "block",
         block: true,
-        beginToken: "{",
-        endToken: "}",
-        name: "meta.brace.curly",
+        beginToken: {
+          name: "meta.brace.curly",
+          matches: "{"
+        },
+        endToken: {
+          name: "meta.brace.curly",
+          matches: "}"
+        },
+        name: "block",
         references: "expression"
       }
     }
   ];
-  context("empty opts", () => {
+  context("valid args and opts", () => {
     it("throws", () => {
-      expect(generateRepo(data, { name: "sqlx", ext: "sqlx" })).toEqual({
-        name: "sqlx",
-        scopeName: "source.sqlx",
-        repository: {
-          root: {
-            name: "root.sqlx",
-            patterns: [
-              {
-                name: "root.sqlx",
-                include: "#expression"
-              }
-            ]
-          }
+      const repo = generateRepo(data, { name: "sqlx", ext: "sqlx" });
+      expect(repo).toEqual({
+        root: {
+          name: "root.sqlx",
+          patterns: [
+            {
+              include: "#expression"
+            }
+          ]
+        },
+        block: {
+          name: "block.sqlx",
+          begin: "\\{",
+          beginCaptures: {
+            0: "meta.brace.curly.sqlx"
+          },
+          end: "\\}",
+          endCaptures: {
+            0: "meta.brace.curly.sqlx"
+          },
+          patterns: [
+            {
+              include: "#expression"
+            }
+          ]
         }
       });
     });
