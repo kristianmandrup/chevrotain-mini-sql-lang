@@ -7,6 +7,7 @@ export class SyntaxModel {
   syntax = createSyntax(this.model);
 }
 
+// decorator
 export function log<T extends { new (...constructorArgs: any[]) }>(
   constructorFunction: T
 ) {
@@ -44,16 +45,37 @@ export const withSyntaxModeller = clazz => {
     this._parserDisabled = true;
   };
 
-  clazz.prototype.consumeStx = function(tokenRef, opts = {}) {
-    const token = this.tokenFor(tokenRef);
+  clazz.prototype.consumeStx = function(tokenRefName, opts = {}) {
     if (!this._parserDisabled) {
+      const token = this.tokenFor(tokenRefName);
       this.CONSUME(token);
     }
     this.syntaxModel().consume(opts);
   };
 
-  clazz.prototype.syntax = function(repoKey, syntaxName, opts: any = {}) {
-    this.syntaxModel().syntax(repoKey, syntaxName, opts);
+  clazz.prototype.subruleStx = function(ruleRefName, opts = {}) {
+    if (!this._parserDisabled) {
+      const rule = this.ruleFor(ruleRefName);
+      // add ruleRef to
+      this.SUBRULE(rule, opts);
+    }
+    const repoKey = opts.type;
+    opts.references = opts.matches;
+    this.syntaxModel().syntax(repoKey, opts);
+  };
+
+  clazz.prototype.subruleStx2 = function(ruleRefName, opts = {}) {
+    if (!this._parserDisabled) {
+      const rule = this.ruleFor(ruleRefName);
+      this.SUBRULE2(rule, opts);
+    }
+    const repoKey = opts.type;
+    opts.references = opts.matches;
+    this.syntaxModel().syntax(repoKey, opts);
+  };
+
+  clazz.prototype.syntax = function(repoKey, opts: any = {}) {
+    this.syntaxModel().syntax(repoKey, opts);
   };
 
   clazz.prototype.tokenFor = function(tokenName) {
@@ -62,6 +84,13 @@ export const withSyntaxModeller = clazz => {
       ? tokenMapEntry.token || tokenMapEntry
       : this.error(`No such token ${tokenName}`);
   };
+
+  clazz.prototype.error =
+    clazz.prototype.error ||
+    function(msg: string, data?: any) {
+      data ? console.error(msg) : console.error(msg, data);
+      throw new Error(msg);
+    };
 
   return clazz;
 };

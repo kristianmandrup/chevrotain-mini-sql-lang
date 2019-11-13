@@ -51,7 +51,7 @@ describe("consume via createConsume", () => {
       });
       expect(blockSyntax).toEqual({
         beginToken: {
-          matches: ["{"],
+          matches: "{",
           name: "curly"
         },
         // partOf: ["expression"],

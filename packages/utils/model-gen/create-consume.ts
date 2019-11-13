@@ -1,17 +1,18 @@
 import uniq from "array-uniq";
+import { toArray } from "../syntax-gen";
 
 export const createConsume = (model: any) => (opts: any = {}): any => {
+  if (!model) {
+    throw new Error("Invalid model");
+  }
   let { type, matches, partOf, begin, end, block } = opts;
 
   const syntax: any = {};
 
   matches = toArray(matches);
-  partOf = toArray(partOf);
 
-  const existingSyntax = (model[type] || {}).syntax || {};
-
-  existingSyntax.partOf = existingSyntax.partOf || [];
-  existingSyntax.matches = existingSyntax.matches || [];
+  const modelEntry = model[type];
+  const existingSyntax = modelEntry ? modelEntry.syntax : {};
 
   if (!block) {
     existingSyntax.matches = existingSyntax.matches || [];
@@ -19,31 +20,32 @@ export const createConsume = (model: any) => (opts: any = {}): any => {
     syntax.matches = matches;
   }
 
+  partOf = toArray(partOf);
   if (partOf) {
     const partOfObj = (model[partOf] = model[partOf] || {});
     partOfObj.references = partOfObj.references || [];
     partOfObj.references.push(type);
     model[partOf] = partOfObj;
   }
+
   let beginToken, endToken;
 
   if (block) {
     syntax.block = true;
     if (begin) {
       beginToken = {
-        matches,
+        matches: matches[0],
         name: begin
       };
     }
     if (end) {
       endToken = {
-        matches,
+        matches: matches[0],
         name: end
       };
     }
   }
 
-  partOf = uniq([...existingSyntax.partOf, ...partOf]);
   if (beginToken) {
     syntax.beginToken = beginToken;
   }
@@ -52,10 +54,11 @@ export const createConsume = (model: any) => (opts: any = {}): any => {
   }
 
   const typeEntry = {
-    syntax
+    syntax: {
+      ...existingSyntax,
+      ...syntax
+    }
   };
   model[type] = typeEntry;
   return model;
 };
-
-export const toArray = entry => (Array.isArray(entry) ? entry : [entry]);

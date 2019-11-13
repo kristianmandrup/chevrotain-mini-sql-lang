@@ -66,17 +66,48 @@ describe("withSyntaxModeller", () => {
     describe("syntax", () => {
       it("adds to syntax model", () => {
         const repoKey = "clause";
-        const syntaxName = "when";
+        const name = "when";
         const opts = {
+          name,
           references: ["when", "from"]
         };
         parser.parserOff();
-        parser.syntax(repoKey, syntaxName, opts);
+        parser.syntax(repoKey, opts);
         const model = parser.stxModel();
         const { clause } = model;
         expect(clause.syntax).toEqual({
           name: "when",
           references: ["when", "from"]
+        });
+      });
+    });
+
+    describe("subruleStx", () => {
+      it("adds to syntax model", () => {
+        parser.parserOff();
+        const $ = parser;
+        const ctx = { type: "scope-block", block: true };
+        const stxName = "meta.brace.curly";
+        $.consumeStx("LBrace", { ...ctx, matches: "{", begin: stxName });
+        $.subruleStx("expression", { ...ctx, matches: "expression" });
+        $.consumeStx("RBrace", { ...ctx, matches: "}", end: stxName });
+
+        const model = parser.stxModel();
+        const syntax = model["scope-block"].syntax;
+
+        // console.log(syntax);
+
+        expect(syntax).toEqual({
+          block: true,
+          beginToken: {
+            matches: "{",
+            name: stxName
+          },
+          endToken: {
+            matches: "}",
+            name: stxName
+          },
+          references: ["expression"]
         });
       });
     });

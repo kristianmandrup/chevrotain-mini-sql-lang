@@ -8,7 +8,8 @@ export const warn = (msg: string, data?: any) => {
   data ? console.warn(msg, data) : console.warn(msg);
 };
 
-export const toArray = entry => (Array.isArray(entry) ? entry : [entry]) || [];
+export const toArray = (entry = []): any[] =>
+  Array.isArray(entry) ? entry : [entry];
 
 export const regexpFor = (strPattern: string) => {
   if (typeof strPattern !== "string") error("regexpFor: must take a string");

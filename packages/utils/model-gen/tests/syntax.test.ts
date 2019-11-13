@@ -11,9 +11,11 @@ describe("syntax via createSyntax", () => {
 
   it("creates syntax", () => {
     const repoKey = "when-condition";
-    const syntaxName = "when";
-    const opts = {};
-    syntax(repoKey, syntaxName, opts);
+    const name = "when";
+    const opts = {
+      name
+    };
+    syntax(repoKey, opts);
     expect(model[repoKey].syntax).toEqual({
       name: "when"
       // references: []
@@ -27,11 +29,12 @@ describe("syntax via createSyntax", () => {
       }
     };
     const repoKey = "clause";
-    const syntaxName = "when";
+    const name = "when";
     const opts = {
-      references: ["when", "from"]
+      references: ["when", "from"],
+      name
     };
-    syntax(repoKey, syntaxName, opts);
+    syntax(repoKey, opts);
     expect(model[repoKey].syntax).toEqual({
       name: "when",
       references: ["select", "from", "when"]

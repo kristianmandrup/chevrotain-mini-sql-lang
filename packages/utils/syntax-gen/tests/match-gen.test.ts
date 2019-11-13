@@ -9,7 +9,7 @@ describe("generateMatchObj", () => {
     });
   });
 
-  context.only("valid item", () => {
+  context("valid item", () => {
     const data = [
       {
         type: "when",
@@ -35,7 +35,7 @@ describe("generateMatchObj", () => {
         }
       }
     ];
-    it("creates syntax object", () => {
+    it.skip("creates syntax object", () => {
       expect(generateMatchObj(data, { ext: "sqlx" })).toEqual({
         name: "meta.keyword.sqlx",
         match: "\\s*(?i)" + "(when)" + "\\b"
