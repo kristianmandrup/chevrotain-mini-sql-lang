@@ -1,5 +1,5 @@
 import { error } from "./util";
-import { createOrMatchesPattern } from "./util";
+import { matchPattern, createOrMatchesPattern } from "./util";
 
 export interface MatchType {
   type: string;
@@ -14,7 +14,7 @@ export const generateMatchObj = (data: any[], opts) =>
     if (!name) error("generateSyntaxObj: missing name", obj);
     const match = Array.isArray(matches)
       ? createOrMatchesPattern(matches, $obj)
-      : matches;
+      : matchPattern(matches);
     const entry = {
       name: `${name}.${opts.ext}`,
       match

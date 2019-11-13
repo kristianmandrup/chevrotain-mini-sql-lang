@@ -19,6 +19,11 @@ export const regexpFor = (strPattern: string) => {
 export const regexpStrFor = (strPattern: string) =>
   regexpFor(strPattern).source;
 
+export const matchPattern = (str: string) => {
+  const strPattern = "\\s*(?i)" + str + "\\b";
+  return strPattern;
+};
+
 export const createOrMatchesPattern = (list: string[], syntax: any) => {
   if (list.length === 0) {
     throw Error(
@@ -27,5 +32,5 @@ export const createOrMatchesPattern = (list: string[], syntax: any) => {
   }
   const orStr = list.join("|");
   const strPattern = "\\s*(?i)(" + orStr + ")\\b";
-  return regexpFor(strPattern);
+  return strPattern;
 };
