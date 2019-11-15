@@ -195,12 +195,6 @@ let invalidInput =
 
 [Utils](./packages/utils/Utils.md)
 
-## Turtle lang example
-
-### Working with parser namespaces
-
-[Turtle Parser](packages/turtle/TurtleParser.md)
-
 ## VS Code Language extension
 
 See [VSC Language extension](./VSC-lang-extension.md)
