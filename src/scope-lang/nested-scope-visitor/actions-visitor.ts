@@ -53,7 +53,6 @@ export class AstVisitor extends BaseVisitor {
 
     // value assigned
     const valueAssigned = this.visit(ctx.reference);
-
     return {
       type: "ASSIGNMENT",
       variableName,
