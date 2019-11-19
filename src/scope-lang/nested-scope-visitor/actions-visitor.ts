@@ -13,9 +13,52 @@ const parserInstance = new ScopeParser([]);
 // The base visitor class can be accessed via the a parser instance.
 const BaseVisitor: any = parserInstance.getBaseCstVisitorConstructor();
 
-export class AstVisitor extends BaseVisitor {
-  constructor() {
+export class PositionVisitor extends BaseVisitor {
+  positioned = false;
+
+  constructor(opts: any = {}) {
     super();
+    this.positioned = opts.positioned;
+  }
+
+  get isPositioned() {
+    return Boolean(this.positioned);
+  }
+
+  $decorate(node, { token }) {
+    return !token ? node : this.$decoratePosition(node, token);
+  }
+
+  $decoratePosition(node, token) {
+    const { isPositioned } = this;
+    // console.log("$decoratePosition", { isPositioned, token });
+    if (isPositioned) {
+      const {
+        startOffset,
+        endOffset,
+        startLine,
+        endLine,
+        startColumn,
+        endColumn
+      } = token;
+      const position = {
+        startOffset,
+        endOffset,
+        startLine,
+        endLine,
+        startColumn,
+        endColumn
+      };
+      // console.log({ position });
+      node.position = position;
+    }
+    return node;
+  }
+}
+
+export class AstVisitor extends PositionVisitor {
+  constructor(opts) {
+    super(opts);
     this.validateVisitor();
   }
 
@@ -49,15 +92,19 @@ export class AstVisitor extends BaseVisitor {
   }
 
   assignment(ctx: any) {
+    // console.log("assignment = ", ctx);
     const variableName = ctx.Identifier[0].image;
 
     // value assigned
     const valueAssigned = this.visit(ctx.reference);
-    return {
+    const node = {
       type: "ASSIGNMENT",
       variableName,
       valueAssigned
     };
+    const assignToken = ctx.Assign[0];
+
+    return this.$decorate(node, { token: assignToken });
   }
 
   // these two visitor methods will return a string.
@@ -71,10 +118,11 @@ export class AstVisitor extends BaseVisitor {
 }
 
 // Our visitor has no state, so a single instance is sufficient.
-const toAstVisitorInstance: any = new AstVisitor();
 
-export const toAst = (inputText: string) => {
+export const toAst = (inputText: string, opts = {}) => {
   const lexResult = lex(inputText);
+
+  const toAstVisitorInstance: any = new AstVisitor(opts);
 
   // ".input" is a setter which will reset the parser's internal's state.
   parserInstance.input = lexResult.tokens;

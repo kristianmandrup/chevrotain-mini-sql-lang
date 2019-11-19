@@ -1,6 +1,4 @@
-export const displayJson = json => {
-  return JSON.stringify(json, null, 2);
-};
+import { displayJson } from "../util";
 
 export class ScopeStackBuilder {
   symbolStack: any[] = [];
@@ -13,7 +11,7 @@ export class ScopeStackBuilder {
   }
 
   build(ast) {
-    return this.scope(ast);
+    return this.evaluate(ast, null);
   }
 
   handlerFor(name: string) {
@@ -46,7 +44,11 @@ export class ScopeStackBuilder {
     console.log(variableName, displayJson(this.symbolStack));
   }
 
-  evaluate(statements: any[]) {
+  evaluate(statements: any[], ctx: any) {
+    if (!statements) {
+      // console.warn("no statements", displayJson(ctx));
+      return;
+    }
     return statements.map(stm => {
       const result = this.handle(stm);
       // console.log("handled stm", result);
@@ -62,17 +64,19 @@ export class ScopeStackBuilder {
       vars: []
     });
 
-    const statements = this.evaluate(ctx.statements);
+    const statements = this.evaluate(ctx.statements, ctx);
     this.symbolStack.pop();
 
-    return {
-      ...ctx,
-      statements
-    };
+    const node = ctx;
+    if (statements) {
+      node.statements = statements;
+    }
+    return node;
   }
 
   assignment(ctx: any) {
     const { variableName } = ctx;
+    console.log("assignment =", ctx);
     const { currentStackScope, stackIndex, symbolStack } = this;
     // console.log({ currentStackScope, stackIndex, symbolStack });
     this.currentStackScope.vars.push(variableName);
