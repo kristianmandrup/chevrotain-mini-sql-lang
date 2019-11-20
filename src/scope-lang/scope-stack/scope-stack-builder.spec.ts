@@ -7,7 +7,7 @@ const context = describe;
 
 const inputText = "{ b=2 { c=3 } d=4 }";
 const scopeTree = toAstVisitor(inputText, { positioned: true });
-console.log(displayJson(scopeTree));
+// console.log(displayJson(scopeTree));
 
 const builder = new ScopeStackBuilder();
 
@@ -15,7 +15,7 @@ describe("Scope stack ", () => {
   const scopedAst: any = builder.build(scopeTree);
   // const { statements } = scopedAst;
   const ctx = scopedAst;
-  console.log(displayJson(scopedAst));
+  // console.log(displayJson(scopedAst));
   const stm1 = ctx[0];
   const stm2 = ctx[1];
   const stm3 = ctx[2];

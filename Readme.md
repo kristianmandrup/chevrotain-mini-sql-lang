@@ -35,21 +35,21 @@ This project uses [Jest](jestjs.io) with [jest-extended](https://github.com/jest
 ```ts
 let inputText = "SELECT column1 FROM table2";
 let lexingResult = lex(inputText);
-const { tokens } = lexingResult
+const { tokens } = lexingResult;
 ```
 
 ### Parser
 
 ```ts
-const inputText = "SELECT column1 FROM table2"
-const result = parse(inputText)
+const inputText = "SELECT column1 FROM table2";
+const result = parse(inputText);
 ```
 
 Invalid input
 
 ```ts
 let inputText = "SELECT FROM table2";
-parse(inputText) // throws
+parse(inputText); // throws
 ```
 
 ### Actions
@@ -89,7 +89,7 @@ const handleFrom = (clause) => clause.table.map(createDbTable)
 const handlerTree = {
   select: {
     fromClause(node) => handleFrom(node)
-  }  
+  }
 }
 
 const stmtHandlers = {
@@ -151,13 +151,12 @@ We should then also modify the reduce to operate on a hashmap (object), merging 
 The result would then be something like:
 
 ```ts
-[{
-  tableInstruction: "CREATE TABLE table2",
-  columnInstructions: [
-    "column1",
-    "column2"
-  ]
-}]
+[
+  {
+    tableInstruction: "CREATE TABLE table2",
+    columnInstructions: ["column1", "column2"]
+  }
+];
 ```
 
 Which we could then use to generate something like:
@@ -190,7 +189,6 @@ Invalid number `696` after `2`
 // the '696' number literal should not appear after the "2"
 let invalidInput =
   '{\n"key1" : 1, \n"key2" : 2 696 \n"key3"  : 3, \n"key4"  : 4 }';
-
 ```
 
 ## Nested Scope example
@@ -207,20 +205,22 @@ It is intended as an example for how to work with nested scopes and provide cont
 
 From [language-server-dot-visual-studio](https://tomassetti.me/language-server-dot-visual-studio/)
 
+[Quick Start to VSCode Plug-Ins: Code Completion](https://medium.com/dataseries/quick-start-to-vscode-plug-ins-code-completion-408b95f5b5a6)
+
 To add the completion provider (aka "content assist) for a VSC extension
 
 ```js
-connection.onInitialize((params): InitializeResult => {  
-    return {
-        capabilities: {
-           // ...
-            completionProvider: {
-                resolveProvider: true,
-                "triggerCharacters": [ '=' ]
-            },
-            hoverProvider: true
-        }
+connection.onInitialize((params): InitializeResult => {
+  return {
+    capabilities: {
+      // ...
+      completionProvider: {
+        resolveProvider: true,
+        triggerCharacters: ["="]
+      },
+      hoverProvider: true
     }
+  };
 });
 ```
 
@@ -228,21 +228,85 @@ Sample `onCompletion` handler:
 
 ```ts
 connection.onCompletion((textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
-    let text = documents.get(textDocumentPosition.textDocument.uri).getText();  
-    let position = textDocumentPosition.position;
+  let text = documents.get(textDocumentPosition.textDocument.uri).getText();
+  let position = textDocumentPosition.position;
+  const lines = text.split(/\r?\n/g);
+  const currentLine = lines[position.line]
 
-   // use parsed model to lookup via position
-    // return a list of auto complete suggestions (for = assignment)
-    return results;
+  // use parsed model to lookup via position
+  // return a list of auto complete suggestions (for = assignment)
+  return results;
 ```
 
 ```ts
 const assignmentIndex = {
-  3: {varsAvailable: ['a'] },
-  9: {varsAvailable: ['a, b'] },
-  17: {varsAvailable: ['b', 'c'] }
-}
+  3: { varsAvailable: ["a"] },
+  9: { varsAvailable: ["a, b"] },
+  17: { varsAvailable: ["b", "c"] }
+};
 ```
+
+```ts
+const toAst = (inputText: string, opts = {}) => {
+  const lexResult = lex(inputText);
+
+  const toAstVisitorInstance: any = new AstVisitor(opts);
+
+  // ".input" is a setter which will reset the parser's internal's state.
+  parserInstance.input = lexResult.tokens;
+
+  // Automatic CST created when parsing
+  const cst = parserInstance.statements();
+
+  if (parserInstance.errors.length > 0) {
+    throw Error(
+      "Sad sad panda, parsing errors detected!\n" +
+        parserInstance.errors[0].message
+    );
+  }
+  const ast = toAstVisitorInstance.visit(cst);
+  // console.log("AST - visitor", ast);
+  return ast;
+}
+
+const onChange = (textDocumentPosition: TextDocumentPositionParams) => {
+    let text = documents.get(textDocumentPosition.textDocument.uri).getText();
+    const scopeTree = toAstVisitor(text, { positioned: true });
+
+    // run scope builder
+    const builder = new ScopeStackBuilder();
+    builder.build(scopeTree);
+    const { lineMap } = builder;
+    // we should
+    this.find = {
+      assignment = createIndexMatcher(lineMap, "assignment");
+    }
+  };
+};
+
+const onCompletion = (textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
+  // position has character and line position
+  let position = textDocumentPosition.position;
+  const lines = text.split(/\r?\n/g);
+  // determine char just before position
+  const pos = {
+    line: position.line,
+    column: position.character
+  };
+  // return a list of auto complete suggestions (for = assignment)
+  const node = this.find.assignment(pos);
+  const varsWithinScope = node.varsAvailable;
+  let completionItems = new Array<CompletionItem>();
+  varsWithinScope.map(varName => results.push({
+    label: varName,
+    kind: CompletionItemKind.Reference,
+    data: varName
+  }))
+  return completionItems;
+};
+```
+
+See [CompletionItemKind](https://docs.microsoft.com/en-us/dotnet/api/microsoft.visualstudio.languageserver.protocol.completionitemkind?view=visualstudiosdk-2019) enum (and more VS Code API documentation)
 
 To find a match, a primitive approach would be to simply iterate through this list until it finds first one with position greater than current document position (or at end of list) then use the one before that.
 

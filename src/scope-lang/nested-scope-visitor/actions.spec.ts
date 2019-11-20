@@ -7,7 +7,7 @@ describe("Scope Visitor", () => {
   it.only("Can convert to AST with position info", () => {
     const inputText = "a=1";
     const astPos = toAstVisitor(inputText, { positioned: true });
-    console.log(displayJson(astPos));
+    // console.log(displayJson(astPos));
     const stm1 = astPos[0];
 
     expect(stm1).toEqual({

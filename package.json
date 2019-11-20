@@ -34,7 +34,6 @@
     "@types/node": "^12.12.6",
     "array-uniq": "^2.1.0",
     "chevrotain": "^6.5.0",
-    "deepmerge": "^4.2.2",
     "lodash.merge": "^4.6.2",
     "lodash.uniqby": "^4.7.0",
     "vscode-languageserver": "^5.2.1"

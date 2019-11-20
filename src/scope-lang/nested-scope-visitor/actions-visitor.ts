@@ -9,7 +9,7 @@ import * as parser from "../parser";
 const ScopeParser: any = parser.ScopeParser;
 
 // A new parser instance with CST output (enabled by default).
-const parserInstance = new ScopeParser([]);
+const parserInstance = new ScopeParser();
 // The base visitor class can be accessed via the a parser instance.
 const BaseVisitor: any = parserInstance.getBaseCstVisitorConstructor();
 
@@ -31,7 +31,6 @@ export class PositionVisitor extends BaseVisitor {
 
   $decoratePosition(node, token) {
     const { isPositioned } = this;
-    // console.log("$decoratePosition", { isPositioned, token });
     if (isPositioned) {
       const {
         startOffset,
@@ -49,8 +48,11 @@ export class PositionVisitor extends BaseVisitor {
         startColumn,
         endColumn
       };
+
       // console.log({ position });
       node.position = position;
+
+      //console.log("$decoratePosition", { token, name });
     }
     return node;
   }

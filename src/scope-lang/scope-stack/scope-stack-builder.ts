@@ -1,7 +1,9 @@
 import { displayJson } from "../util";
+import merge from "lodash.merge";
 
 export class ScopeStackBuilder {
   symbolStack: any[] = [];
+  lineMap: any = {};
 
   get typeHandlerMap() {
     return {
@@ -74,20 +76,49 @@ export class ScopeStackBuilder {
     return node;
   }
 
+  lineObjFor(lineNumber: number) {
+    this.lineMap = this.lineMap || {};
+    this.lineMap[lineNumber] = this.lineMap[lineNumber] || {};
+    return this.lineMap[lineNumber];
+  }
+
+  setLineObj(lineNumber: number, obj: any) {
+    let currObj = this.lineObjFor(lineNumber);
+    const newObj = merge(currObj, obj);
+    console.log("setLineObj", { newObj });
+    this.lineMap[lineNumber] = newObj;
+    console.log(displayJson(this.lineMap));
+  }
+
+  indexAssignment(position, node) {
+    const { startColumn, startLine } = position;
+    const assignObj = {
+      [startColumn]: node
+    };
+    this.setLineObj(startLine, {
+      assignment: assignObj
+    });
+  }
+
   assignment(ctx: any) {
-    const { variableName } = ctx;
-    console.log("assignment =", ctx);
-    const { currentStackScope, stackIndex, symbolStack } = this;
+    const { variableName, position } = ctx;
+    // console.log("assignment =", ctx);
+    const { currentStackScope, symbolStack } = this;
     // console.log({ currentStackScope, stackIndex, symbolStack });
-    this.currentStackScope.vars.push(variableName);
-    const varsAvailable = this.symbolStack.reduce((acc, item) => {
+    currentStackScope.vars.push(variableName);
+    const varsAvailable = symbolStack.reduce((acc, item) => {
       return acc.concat(item.vars);
     }, []);
-    // console.log({ varsAvailable });
-    // this.displaySymbolStack(variableName);
-    return {
+
+    const node = {
       ...ctx,
       varsAvailable
     };
+
+    this.indexAssignment(position, node);
+
+    // console.log({ varsAvailable });
+    // this.displaySymbolStack(variableName);
+    return node;
   }
 }
