@@ -1,6 +1,8 @@
 # Chevrotain SQL parser in TypeScript
 
-The [Chevrotatain SQL parser tutorial](https://sap.github.io/chevrotain/docs/tutorial) converted to [TypeScript](https://www.typescriptlang.org/) and [Jest](jestjs.io)
+The [Chevrotatain mini SQL parser tutorial](https://sap.github.io/chevrotain/docs/tutorial) converted to [TypeScript](https://www.typescriptlang.org/) and [Jest](jestjs.io)
+
+Also includes a nested scope language example in `src/scope-lang`
 
 - [Original Chevrotain example code](https://github.com/SAP/chevrotain/tree/master/examples/tutorial)
 
@@ -191,18 +193,65 @@ let invalidInput =
 
 ```
 
-### Basic utilities
+## Nested Scope example
 
-[Utils](./packages/utils/Utils.md)
+The nested scope language example can be found in `src/scope-lang`.
+
+It is intended as an example for how to work with nested scopes and provide content assist over LSP for an editor/IDE such as VS Code.
+
+## Content Assist
+
+- [chevrotain content assist example project](https://github.com/SAP/chevrotain/tree/master/examples/parser/content_assist) with specs.
+
+- [Chevrotain Editor/LSP discussion](https://github.com/SAP/chevrotain/issues/921#issuecomment-555581552)
+
+From language-server-dot-visual-studio/
+
+To add the completion provider (aka "content assist) for a VSC extension
+
+connection.onInitialize((params): InitializeResult => {  
+    return {        
+        capabilities: {
+           // ...
+            completionProvider: {
+                resolveProvider: true,
+                "triggerCharacters": [ '=' ]
+            },
+            hoverProvider: true     
+        }
+    }
+});
+
+Sample `onCompletion` handler:
+
+```ts
+connection.onCompletion((textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
+    let text = documents.get(textDocumentPosition.textDocument.uri).getText();  
+    let position = textDocumentPosition.position;
+
+   // use parsed model to lookup via position
+    // return a list of auto complete suggestions (for = assignment)
+    return results;
+```
+
+```ts
+const assignmentIndex = {
+  3: {varsAvailable: ['a'] },
+  9: {varsAvailable: ['a, b'] },
+  17: {varsAvailable: ['b', 'c'] }
+}
+```
+
+To find a match, a primitive approach would be to simply iterate through this list until it finds first one with position greater than current document position (or at end of list) then use the one before that.
 
 ## VS Code Language extension
 
 See [VSC Language extension](./VSC-lang-extension.md)
 
-### LSP Documentation
+### Editor/IDE utils
 
-[LSP utils](./packages/lsp-utils/LSP-utils.md)
+[chevrotain-editor-utils](https://github.com/kristianmandrup/chevrotain-editor-utils)
 
-### Base Language Server
+### Language Server utils
 
-[Base Language Server](./packages/base-language-server/src/BaseLanguageServer.md)
+[chevrotain-lsp-utils](https://github.com/kristianmandrup/chevrotain-lsp-utils)
