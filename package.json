@@ -1,10 +1,10 @@
 {
-  "name": "sql-lang",
+  "name": "chevrotain-sql-lang",
   "version": "1.0.0",
-  "description": "",
+  "description": "Chevrotain mini SQL language for Language Server Protocol (LSP)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx jest"
   },
   "keywords": [],
   "author": "",
