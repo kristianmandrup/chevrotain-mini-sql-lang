@@ -205,22 +205,24 @@ It is intended as an example for how to work with nested scopes and provide cont
 
 - [Chevrotain Editor/LSP discussion](https://github.com/SAP/chevrotain/issues/921#issuecomment-555581552)
 
-From language-server-dot-visual-studio/
+From [language-server-dot-visual-studio](https://tomassetti.me/language-server-dot-visual-studio/)
 
 To add the completion provider (aka "content assist) for a VSC extension
 
+```js
 connection.onInitialize((params): InitializeResult => {  
-    return {        
+    return {
         capabilities: {
            // ...
             completionProvider: {
                 resolveProvider: true,
                 "triggerCharacters": [ '=' ]
             },
-            hoverProvider: true     
+            hoverProvider: true
         }
     }
 });
+```
 
 Sample `onCompletion` handler:
 
